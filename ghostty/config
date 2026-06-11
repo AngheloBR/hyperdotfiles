@@ -1,0 +1,13 @@
+theme = ~/.config/ghostty/tokyo-night
+
+font-family = JetBrains Mono Nerd Font
+font-size = 11
+
+background-opacity = 1
+window-padding-x = 8
+window-padding-y = 4
+gtk-titlebar = none
+
+shell-integration = zsh
+confirm-close-surface = false
+gpu-accelerated = true

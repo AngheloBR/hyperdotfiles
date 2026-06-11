@@ -1,0 +1,12 @@
+configuration {
+    modi: "drun,window,run";
+    show-icons: true;
+    display-drun: "Apps";
+    display-run: "Run";
+    display-window: "Windows";
+    font: "JetBrainsMono Nerd Font 12";
+    terminal: "ghostty";
+}
+
+@import "colors"
+@theme "tokyo-night"

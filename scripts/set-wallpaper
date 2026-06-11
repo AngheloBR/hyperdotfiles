@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+WALL_DIR="$CONFIG/wallpapers"
+MATUGEN_OUT="$CONFIG/matugen/output"
+
+if [[ $# -ge 1 ]]; then
+    IMG="$1"
+else
+    IMG=$(find "$WALL_DIR" -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) | shuf -n1)
+fi
+
+[[ -z "$IMG" || ! -f "$IMG" ]] && { echo "No wallpaper found." >&2; exit 1; }
+
+swww img "$IMG" --transition-fps 60 --transition-type grow --transition-duration 0.5
+ln -sf "$IMG" "$WALL_DIR/current"
+
+if command -v matugen &> /dev/null; then
+    matugen image "$IMG" -t scheme-tonal-spot
+
+    cp "$MATUGEN_OUT/hypr-colors.conf" "$CONFIG/hypr/colors.conf" && hyprctl reload
+    [[ -f "$MATUGEN_OUT/waybar-colors.css" ]] && cp "$MATUGEN_OUT/waybar-colors.css" "$CONFIG/waybar/colors.css" && pkill -SIGUSR2 waybar 2>/dev/null || true
+    [[ -f "$MATUGEN_OUT/rofi-colors.rasi" ]] && cp "$MATUGEN_OUT/rofi-colors.rasi" "$CONFIG/rofi/colors.rasi"
+    [[ -f "$MATUGEN_OUT/ghostty-tokyo-night" ]] && cp "$MATUGEN_OUT/ghostty-tokyo-night" "$CONFIG/ghostty/tokyo-night"
+fi

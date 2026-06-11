@@ -1,0 +1,8 @@
+:root {
+    --bg: rgba(24, 27, 38, 0.85);
+    --fg: #a9b1d6;
+    --active: #7aa2f7;
+    --urgent: #f7768e;
+    --warning: #e0af68;
+    --muted: #565f89;
+}

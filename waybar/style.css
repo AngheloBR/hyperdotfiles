@@ -1,0 +1,53 @@
+@import "colors.css";
+
+* {
+    border: none;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background: var(--bg, rgba(24, 27, 38, 0.85));
+    color: var(--fg, #a9b1d6);
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background: transparent;
+    color: var(--muted, #565f89);
+}
+
+#workspaces button.active {
+    color: var(--active, #7aa2f7);
+    border-bottom: 2px solid var(--active, #7aa2f7);
+}
+
+#workspaces button.urgent {
+    color: var(--urgent, #f7768e);
+    border-bottom: 2px solid var(--urgent, #f7768e);
+}
+
+#clock,
+#battery,
+#pulseaudio,
+#tray {
+    padding: 0 8px;
+    color: var(--fg, #a9b1d6);
+}
+
+#battery.warning {
+    color: var(--warning, #e0af68);
+}
+
+#battery.critical {
+    color: var(--urgent, #f7768e);
+}
+
+#pulseaudio.muted {
+    color: var(--muted, #565f89);
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}

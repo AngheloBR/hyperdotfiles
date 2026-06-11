@@ -1,0 +1,72 @@
+#! /bin/sh
+
+# 1. INICIO DE SERVICIOS ESENCIALES
+# ---------------------------------------------------------
+# Carga los atajos de teclado (sxhkd)
+pgrep -x sxhkd >/dev/null || sxhkd &
+
+# --- AQUI AGREGAS POLYBAR ---
+killall -q polybar
+~/.config/polybar/launch.sh &
+picom &
+dunst &
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+# ----------------------------
+
+# Applets de Red y Bluetooth para la bandeja del sistema
+#nm-applet &
+#blueman-applet &   # desactivado: usa bluetoothctl + módulo polybar para liberar ~130 MB
+
+# Carga el motor de fondos automáticos (y evita que se duplique)
+pkill -f cambiar_fondo.sh
+~/.config/bspwm/cambiar_fondo.sh &
+
+# 2. CONFIGURACIÓN DE MONITORES Y ESCRITORIOS
+# ---------------------------------------------------------
+# Define 10 escritorios virtuales (del I al X)
+bspc monitor -d I II III IV V VI VII VIII IX X
+
+# 3. APARIENCIA VISUAL (LAYOUT)
+# ---------------------------------------------------------
+# Grosor del borde de las ventanas (puedes subirlo a 3 si quieres que se note más)
+bspc config border_width 2
+
+# Espacio entre ventanas (Gap). 12 es un buen número para que se vea el fondo.
+bspc config window_gap 12
+
+# Padding superior para que la barra floating no solape las ventanas
+bspc config top_padding 36
+bspc config top_padding 0
+# Proporción al dividir pantalla (0.50 es mitad y mitad exacta)
+bspc config split_ratio 0.50
+
+# Elimina bordes si solo hay una ventana abierta (Monocle mode)
+bspc config borderless_monocle true
+bspc config gapless_monocle true
+
+# Colores de los bordes (Azul CachyOS / Hacker style)
+bspc config normal_border_color "#24283b"
+bspc config active_border_color "#414868"
+bspc config focused_border_color "#7aa2f7"
+
+# 4. REGLAS DE APLICACIONES
+# ---------------------------------------------------------
+# Firefox siempre se abrirá en el escritorio 2 y nos llevará hacia él
+bspc rule -a Firefox desktop='^2' follow=on
+
+# Ventanas que siempre deben salir "flotando" (no ocupan toda la pantalla)
+bspc rule -a mplayer2 state=floating
+bspc rule -a GParted state=floating
+bspc rule -a Screenkey manage=off
+
+# ---------------------------------------------------------
+# Fin del archivo
+
+# Quitar el borde cuadrado a Rofi
+bspc rule -a Rofi state=floating border=off
+bspc rule -a rofi state=floating border=off
+
+# Gestor de portapapeles en segundo plano
+greenclip daemon &
+
+bspc rule -a Toplevel state=floating center=true

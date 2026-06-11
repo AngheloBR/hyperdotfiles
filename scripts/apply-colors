@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+MATUGEN_OUT="$CONFIG/matugen/output"
+
+WALL=$(swww query | grep -oP 'image: \K.+')
+
+if [[ -z "$WALL" || ! -f "$WALL" ]]; then
+    echo "Could not find current wallpaper." >&2
+    echo "Usage: apply-colors (no args — regenerates from current wallpaper)" >&2
+    exit 1
+fi
+
+matugen image "$WALL" -t scheme-tonal-spot
+
+cp "$MATUGEN_OUT/hypr-colors.conf" "$CONFIG/hypr/colors.conf" && hyprctl reload
+[[ -f "$MATUGEN_OUT/waybar-colors.css" ]] && cp "$MATUGEN_OUT/waybar-colors.css" "$CONFIG/waybar/colors.css" && pkill -SIGUSR2 waybar 2>/dev/null || true
+[[ -f "$MATUGEN_OUT/rofi-colors.rasi" ]] && cp "$MATUGEN_OUT/rofi-colors.rasi" "$CONFIG/rofi/colors.rasi"
+[[ -f "$MATUGEN_OUT/ghostty-tokyo-night" ]] && cp "$MATUGEN_OUT/ghostty-tokyo-night" "$CONFIG/ghostty/tokyo-night"
